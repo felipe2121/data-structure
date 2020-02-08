@@ -1,0 +1,190 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+
+        Lista cifra = new Lista();
+        char tabela;
+
+        Scanner prompt = new Scanner(System.in);
+
+        System.out.println("Digite a operação encriptação ou decriptação: ");
+        String comando = prompt.next();
+
+        System.out.println("*************************");
+
+        prompt.nextLine();
+        System.out.println("Digite a mensagem: ");
+        String msg = prompt.next();
+
+        prompt.nextLine();
+        System.out.println("Digite a chave: ");
+        int key = prompt.nextInt();
+
+        while (key >= 26) {
+            key -= 26;
+        }
+        for (int i = 0; i < msg.length(); i++) {
+            if(comando.equals("encriptação")){
+                if ((int) msg.charAt(i) >= 97 && (int) msg.charAt(i) <= 122) {
+                    if (((int) msg.charAt(i) + key) > 122) {
+                        tabela = (char) (msg.charAt(i) + key - 26);
+                        cifra.adicionar(msg.charAt(i), tabela);
+                    } else {
+                        tabela = (char) (msg.charAt(i) + key);
+                        cifra.adicionar(msg.charAt(i), tabela);
+                    }
+                }else if (msg.charAt(i) >= 65 && msg.charAt(i) <= 90) {
+                    if (msg.charAt(i) + key > 90) {
+                        tabela = (char) (msg.charAt(i) + key - 26);
+                        cifra.adicionar(msg.charAt(i), tabela);
+                    } else {
+                        tabela = (char) (msg.charAt(i) + key);
+                        cifra.adicionar(msg.charAt(i), tabela);
+                    }
+                }else {
+                    System.out.println("MESAGEM INVÁLIDA");
+                }
+                cifra.setComando(true);
+            } else if(comando.equals("decriptação")){
+                if ((int) msg.charAt(i) >= 97 && (int) msg.charAt(i) <= 122) {
+                    if (((int) msg.charAt(i) - key) < 97) {
+                        tabela = (char) (msg.charAt(i) - key + 26);
+                        cifra.adicionar(tabela, msg.charAt(i));
+                    } else {
+                        tabela = (char) (msg.charAt(i) - key);
+                        cifra.adicionar(tabela, msg.charAt(i));
+                    }
+                }else if (msg.charAt(i) >= 65 && msg.charAt(i) <= 90) {
+                    if (msg.charAt(i) - key < 65) {
+                        tabela = (char) (msg.charAt(i) - key + 26);
+                        cifra.adicionar(tabela, msg.charAt(i));
+                    } else {
+                        tabela = (char) (msg.charAt(i) - key);
+                        cifra.adicionar(tabela, msg.charAt(i));
+                    }
+                }else {
+                    System.out.println("MESAGEM INVÁLIDA");
+                }
+                cifra.setComando(false);
+            }
+        }
+        cifra.exibir();
+    }
+}
+
+public class Lista {
+    private No primeiro;
+    private No ultimo;
+    private boolean comando;
+
+    public boolean isComando() {
+        return comando;
+    }
+
+    public void setComando(boolean comando) {
+        this.comando = comando;
+    }
+
+    Lista() {
+        primeiro = null;
+        ultimo = null;
+    }
+
+    public void adicionar(char valor, char encri) {
+        No novo = new No(valor, encri);
+
+        if (primeiro == null) {
+            primeiro = novo;
+            ultimo = novo;
+            novo.setProximo(null);
+            novo.setAnt(null);
+        }
+        else {
+            ultimo.setProximo(novo);
+            novo.setProximo(null);
+            novo.setAnt(ultimo);
+            ultimo = novo;
+        }
+    }
+
+    public void exibir() {
+        if(comando){
+            No aux = primeiro;
+            while (aux != null) {
+                System.out.print(aux.getCifra().getEncri());
+                aux = aux.getProximo();
+            }
+        }else{
+            No aux = primeiro;
+            while (aux != null) {
+                System.out.print(aux.getCifra().getNomarl());
+                aux = aux.getProximo();
+            }
+        }
+    }
+}
+
+public class No {
+    private msg cifra;
+    private No proximo;
+    private No ant;
+
+    public No(char normal, char encri){
+        cifra = new msg(normal, encri);
+        this.proximo = null;
+    }
+
+    No(msg valor) {
+        this.cifra = valor;
+    }
+
+    public No getAnt() {
+        return ant;
+    }
+
+    void setAnt(No ant) {
+        this.ant = ant;
+    }
+
+    msg getCifra() {
+        return cifra;
+    }
+
+    public void setCifra(msg cifra) {
+        this.cifra = cifra;
+    }
+
+    No getProximo() {
+        return proximo;
+    }
+
+    void setProximo(No proximo) {
+        this.proximo = proximo;
+    }
+}
+
+public class msg {
+    private char nomarl;
+    private char encri;
+
+    public msg(char nomarl, char encri) {
+        this.nomarl = nomarl;
+        this.encri = encri;
+    }
+
+    public char getNomarl() {
+        return nomarl;
+    }
+
+    public void setNomarl(char nomarl) {
+        this.nomarl = nomarl;
+    }
+
+    public char getEncri() {
+        return encri;
+    }
+
+    public void setEncri(char encri) {
+        this.encri = encri;
+    }
+}
