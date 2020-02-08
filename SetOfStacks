@@ -1,0 +1,126 @@
+public class Main {
+    public static void main(String[] args) {
+        SetOfStacks SuperPilha = new SetOfStacks(10);
+
+        SuperPilha.push(3);
+        SuperPilha.push(96);
+        SuperPilha.push(85);
+        SuperPilha.push(44);
+        SuperPilha.push(56);
+        SuperPilha.push(63);
+
+        SuperPilha.push(8);
+        SuperPilha.push(98);
+        SuperPilha.push(2);
+        SuperPilha.push(55);
+        SuperPilha.push(75);
+        SuperPilha.push(20);
+        SuperPilha.push(58);
+        SuperPilha.push(71);
+        SuperPilha.push(15);
+        SuperPilha.push(74);
+
+        SuperPilha.pop();
+        SuperPilha.pop();
+        SuperPilha.pop();
+
+        SuperPilha.exibir();
+    }
+}
+
+public class SetOfStacks {
+    private Pilha primeiro;
+    private int tamanho;
+    private int max;
+
+    public SetOfStacks(int max) {
+        this.max = max;
+        primeiro = new Pilha();
+        tamanho++;
+    }
+
+    public void push(int num) {
+        if (primeiro.getTamanho() + 1 > max) {
+            Pilha ant = primeiro;
+
+            primeiro = new Pilha();
+            primeiro.prox = ant;
+
+            if (ant != null) {
+                ant.ant = primeiro;
+            }else{
+             tamanho++;
+            }
+        }else{
+            primeiro.push(num);
+        }
+    }
+
+    public No pop() {
+        No novo = primeiro.pop();
+        if (primeiro.getTamanho() == 0) {
+            primeiro = primeiro.prox;
+            primeiro.ant = null;
+            tamanho--;
+        }
+        return novo;
+    }
+
+    public void exibir() {
+        Pilha p1 = primeiro;
+
+        while (p1 != null) {
+            p1.exibir();
+            p1 = p1.prox;
+        }
+    }
+}
+
+public class Pilha {
+    private No primeiro;
+    private int tamanho;
+    Pilha prox;
+    Pilha ant;
+
+    public void push(int num) {
+        No novo = new No();
+
+        novo.num = num;
+        novo.prox = primeiro;
+        primeiro = novo;
+        tamanho++;
+    }
+
+    public No pop() {
+        No novo = primeiro;
+
+        primeiro = primeiro.prox;
+        tamanho--;
+        return novo;
+    }
+
+    public void exibir() {
+        System.out.println("---------------");
+
+        No novo = primeiro;
+
+        while (novo != null) {
+            System.out.println(novo.num);
+            novo = novo.prox;
+        }
+    }
+
+    int getTamanho() {
+        return tamanho;
+    }
+}
+
+public class No {
+    public int num;
+    public No prox;
+
+    No() {}
+}
+
+
+
