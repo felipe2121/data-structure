@@ -1,0 +1,237 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        ListaDuplamente l = new ListaDuplamente();
+        Scanner prompt = new Scanner(System.in);
+;
+        while(true){
+            System.out.println("Escolha um comando, 1(Adcionar inicio), 2(Adicionar final), 3(Adicionar posicao), 4(Remover inicio), " +
+                    "5(Remover final), 6(Remover posição), 7(buscar), 8(exibir), 9(parar)");
+            int x = prompt.nextInt();
+            if(x == 1){
+                System.out.println("Digite o elemento a ser adcionado no começo: ");
+                String e = prompt.next();
+                l.addI(e);
+            }
+            if(x == 2){
+                System.out.println("Digite o elemento a ser adcionado no final: ");
+                String e = prompt.next();
+                l.addF(e);
+            }
+            if(x == 3){
+                System.out.println("Digite o elemento a ser adcionado: ");
+                String e = prompt.next();
+                prompt.nextLine();
+                System.out.println("Digite a posicao onde ele sera adicionada");
+                int i = prompt.nextInt();
+                l.addP(e,i);
+            }
+            if(x == 4){
+                l.removerI();
+            }
+            if(x == 5){
+                l.removerF();
+            }
+            if(x == 6){
+                System.out.println("Digite a posicao a ser removida: ");
+                int i = prompt.nextInt();
+                l.removerP(i);
+            }
+            if(x == 7){
+                prompt.nextLine();
+                System.out.println("Digite o nome a ser buscado");
+                String e = prompt.next();
+                l.Buscar(e);
+            }
+            if(x == 8){
+                l.exibir();
+            }
+            if(x == 9){
+                break;
+            }
+        }
+    }
+}
+
+class ListaDuplamente {
+    public No primeiro;
+    public No ultimo;
+    public int tamanho;
+
+    public ListaDuplamente() {
+        primeiro = null;
+        ultimo = null;
+        tamanho = 0;
+    }
+
+    public boolean LISTA_VAZIA(){
+        if(primeiro == null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void addI(String e){
+        No novo = new No(e);
+        novo.proximo = primeiro;
+        if(LISTA_VAZIA()){
+            primeiro = novo;
+            novo.proximo = primeiro;
+            ultimo = novo;
+        }else{
+            ultimo.proximo = novo;
+            primeiro = novo;
+        }
+        tamanho++;
+    }
+
+    public void addF(String e){
+        No novo = new No(e);
+        novo.proximo = primeiro;
+        if(LISTA_VAZIA()){
+            primeiro = novo;
+            novo.proximo = primeiro;
+            ultimo = primeiro;
+        }else{
+            ultimo.proximo = novo;
+            ultimo = novo;
+        }
+        tamanho++;
+    }
+
+    public void addP(String e, int pos){
+        if(LISTA_VAZIA()){
+            System.out.println("Lista vazia");
+        }
+        No novo = new No(e);
+        No aux = primeiro;
+        pos = pos - 1;
+        for(int i = 1; i < tamanho; i++){
+            if(i == pos){
+                No atual = aux.proximo;
+                aux.proximo = novo;
+                novo.proximo = atual;
+                break;
+            }
+            aux = aux.proximo;
+        }
+        tamanho++;
+    }
+
+    public void removerI(){
+        if(LISTA_VAZIA()){
+            System.out.println("Lista vazia");
+        }else{
+            primeiro = primeiro.proximo;
+            ultimo.proximo = primeiro;
+            tamanho--;
+        }
+    }
+
+    public void removerF(){
+        if(LISTA_VAZIA()){
+            System.out.println("Lista vazia");
+        }else{
+            No aux = primeiro;
+            while(aux.proximo != ultimo){
+                aux = aux.proximo;
+            }
+            ultimo = aux;
+            ultimo.proximo = primeiro;
+            tamanho--;
+        }
+    }
+
+    public void removerP(int pos){
+        if(LISTA_VAZIA()){
+            System.out.println("Lista vazia");
+        }
+        if(tamanho == 1 && pos == 1){
+            primeiro = null;
+            ultimo = null;
+            tamanho = 0;
+        }
+        if(pos == 1){
+            primeiro = primeiro.proximo;
+            ultimo.proximo = primeiro;
+            tamanho--;
+        }
+        if(pos == tamanho){
+            No aux = primeiro;
+            No aux2 = primeiro;
+            while(aux != ultimo){
+                aux2 = aux;
+                aux = aux.proximo;
+            }
+            ultimo = aux2;
+            ultimo.proximo = primeiro;
+            tamanho--;
+        }
+        No aux = primeiro;
+        pos = pos - 1;
+        for(int i = 1; i < tamanho; i++){
+            if(i == pos){
+                No aux2 = aux.proximo;
+                aux2 = aux2.proximo;
+                aux.proximo = aux2;
+                break;
+            }
+            aux = aux.proximo;
+        }
+        tamanho--;
+    }
+
+    public void Buscar(String e){
+        No aux = primeiro;
+        int cont = 0;
+
+        if(LISTA_VAZIA()){
+            System.out.println("Lista vazia");
+        }
+        if(tamanho == 1){
+            if(e.equalsIgnoreCase(aux.elemento_armazenado)){
+                System.out.println("Encontrado");
+            }else{
+                System.out.println("Elmento nao encontrado");
+            }
+        }
+        if(tamanho > 1){
+            while(aux.proximo != primeiro){
+                if(e.equalsIgnoreCase(aux.elemento_armazenado)){
+                    System.out.println("Encontrado");
+                }
+                if(e.equalsIgnoreCase(ultimo.elemento_armazenado)){
+                    System.out.println("Encontrado");
+                }
+                cont++;
+                aux = aux.proximo;
+            }
+            if(cont == tamanho){
+                System.out.println("Nao encontrado");
+            }
+        }
+    }
+
+    public void exibir(){
+        No atual = primeiro;
+        if(LISTA_VAZIA()){
+            System.out.println("Lista vazia");
+        }
+        while(atual.proximo != primeiro){
+            System.out.println(atual.elemento_armazenado);
+            atual = atual.proximo;
+        }
+        System.out.println(ultimo.elemento_armazenado);
+    }
+}
+
+class No {
+    public String elemento_armazenado;
+    public No proximo;
+
+    public No(String e){
+        this.elemento_armazenado = e;
+        proximo = null;
+    }
+}
